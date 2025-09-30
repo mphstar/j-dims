@@ -1,107 +1,79 @@
 import { useRef, useEffect, useState } from "react";
 import { animate, type AnimationPlaybackControls } from "framer-motion";
+import { Head } from '@inertiajs/react';
 import { CursorBullet } from "@/components/organisms/CursorBullet";
 import { Section, SectionData } from "@/components/organisms/Section";
+import { CarouselSection } from "@/components/organisms/CarouselSection";
 import { Logo } from "@/components/atoms/Logo";
 import { ScrollProgress } from "@/components/molecules/ScrollProgress";
 import { ArrowNav } from "@/components/molecules/ArrowNav";
 import { NavDots } from "@/components/molecules/NavDots";
 import { Header } from "@/components/templates/Header";
 
-const SECTIONS: SectionData[] = [
-  {
-    id: "intro",
-    title: "Jelajah Nusantara",
-    navLabel: "Intro",
-    subtitle: "Eksplor keindahan alam & budaya Indonesia dari barat ke timur",
-    bg: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1400&auto=format&fit=crop",
+// Database interfaces
+interface OverlayType {
+  id: number;
+  overlay_url: string;
+  position_horizontal: 'left' | 'center' | 'right' | null;
+  position_vertical: 'top' | 'center' | 'bottom' | null;
+  object_fit: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' | 'crop' | null;
+}
 
-    content: (
-      <p className="max-w-2xl mx-auto md:mx-0 text-white/90 md:text-lg leading-relaxed">
-        Indonesia adalah mosaik kepulauan dengan lebih dari 17.000 pulau, setiap sudutnya
-        menawarkan lanskap dramatis, kuliner khas, dan tradisi hidup. Gulir untuk melihat beberapa
-        destinasi ikonik yang memanggil petualang maupun pencari ketenangan.
-      </p>
-    ),
-    ctaHref: "#",
-  },
-  {
-    id: "bali",
-    title: "Bali",
-    navLabel: "Bali",
-    subtitle: "Pulau Dewata: budaya, spiritualitas & seni yang berpadu",
-    bg: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1400&auto=format&fit=crop",
-    content: (
-      <div className="max-w-xl space-y-4">
-        <p className="text-white/90">
-          Dari terasering hijau Ubud hingga pantai berpasir emas di selatan, Bali memanjakan indera.
-          Upacara harian, aroma dupa, dan arsitektur pura menciptakan ritme spiritual yang khas.
-        </p>
-        <ul className="text-white/80 text-sm md:text-base list-disc pl-5 grid gap-1">
-          <li>Ubud: seni, yoga, kuliner sehat</li>
-          <li>Canggu & Uluwatu: peselancar & sunset epik</li>
-          <li>Tirta Empul & Tanah Lot: ritual & panorama</li>
-        </ul>
-      </div>
-    ),
-    ctaHref: "#",
-  },
-  {
-    id: "raja-ampat",
-    title: "Raja Ampat",
-    navLabel: "Raja",
-    subtitle: "Surga biodiversitas bawah laut dunia",
-    bg: "https://akcdn.detik.net.id/visual/2025/06/10/fakta-menarik-raja-ampat-foto-unsplashcomsimon-spring-1749562020339_169.png?w=1200&q=90",
-    overlays: ["/overlays/leaf.png"],
-    content: (
-      <div className="max-w-xl space-y-4">
-        <p className="text-white/90">
-          Perairan sebening kristal dengan karang sehat dan ribuan spesies ikan. Menyelam di sini
-          seperti masuk katalog kehidupan laut yang berdenyut warna-warni.
-        </p>
-        <p className="text-white/80 text-sm md:text-base">
-          Pulau karst yang menjulang dari laut tenang menciptakan labirin alami menakjubkan.
-        </p>
-      </div>
-    ),
-    ctaHref: "#",
-  },
-  {
-    id: "bromo",
-    title: "Bromo",
-    navLabel: "Bromo",
-    subtitle: "Drama matahari terbit di samudera pasir",
-    bg: "https://torch.id/cdn/shop/articles/Artikel_167_-_Preview.webp?v=1713337145&width=1100",
-    content: (
-      <div className="max-w-xl space-y-4">
-        <p className="text-white/90">
-          Siluet gunung berlapis kabut, langit berubah dari ungu ke keemasan, lalu kawah mengepul.
-          Pengalaman sunrise di Bromo adalah teater alam yang tak terlupakan.
-        </p>
-        <p className="text-white/80 text-sm md:text-base">
-          Setelah itu, jelajah lautan pasir dan tangga menuju bibir kawah beraroma sulfur.
-        </p>
-      </div>
-    ),
-    ctaHref: "#",
-  },
-  {
-    id: "closing",
-    title: "Rencanakan Perjalananmu",
-    navLabel: "Akhir",
-    subtitle: "Saatnya wujudkan destinasi impian",
-    bg: "https://images.unsplash.com/photo-1533636721434-0e2d61030955?q=80&w=1400&auto=format&fit=crop",
-    content: (
-      <p className="max-w-2xl text-white/90 md:text-lg leading-relaxed">
-        Mulai dari memilih musim terbaik, memesan akomodasi berkelanjutan, hingga merencanakan
-        aktivitas lokal yang autentik. Jadikan tripmu bermakna bagi komunitas & alam.
-      </p>
-    ),
-    ctaHref: "#",
-  },
-];
+interface PariwisataType {
+  id: number;
+  title: string;
+  label: string;
+  subtitle: string;
+  slug: string;
+  content: string;
+  background_url: string;
+  cta_href: string;
+  cta_label: string;
+  align: 'left' | 'right';
+  overlays: OverlayType[];
+}
 
-export default function App() {
+interface SettingType {
+  style: 'column' | 'row';
+}
+
+interface Props {
+  pariwisata: PariwisataType[];
+  setting: SettingType;
+}
+
+// Function to convert database data to SectionData format
+function convertToSectionData(pariwisataData: PariwisataType[]): SectionData[] {
+  return pariwisataData.map((item, index) => ({
+    id: item.slug || `section-${index}`,
+    title: item.title,
+    navLabel: item.label || item.title.substring(0, 8),
+    subtitle: item.subtitle,
+    bg: item.background_url,
+  overlays: item.overlays?.map(overlay => ({
+    url: overlay.overlay_url,
+    position_horizontal: overlay.position_horizontal,
+    position_vertical: overlay.position_vertical,
+    object_fit: overlay.object_fit
+  })) || [],
+    content: (
+      <div className="max-w-xl space-y-4">
+        <p className="text-white/90">
+          {item.content}
+        </p>
+      </div>
+    ),
+    ctaHref: item.cta_href || "#",
+  }));
+}
+
+
+
+export default function PariwisataView({ pariwisata, setting }: Props) {
+  // Convert database data to existing SectionData format
+  const SECTIONS = convertToSectionData(pariwisata);
+  const isRowLayout = setting.style === 'row';
+  
   // ==== Asset Preloader (background & overlays) ====
   const [progress, setProgress] = useState(0); // 0..1
   const [ready, setReady] = useState(false);
@@ -117,19 +89,46 @@ export default function App() {
     if (urls.length === 0) { setProgress(1); setReady(true); return; }
     let loaded = 0;
     const start = performance.now();
-    urls.forEach(u => {
-      const img = new Image();
-      const done = () => {
-        loaded += 1;
-        setProgress(loaded / urls.length);
-        if (loaded === urls.length) {
-          const elapsed = performance.now() - start;
-          const minDelay = 550; // ms for nicer fade
-          const wait = Math.max(0, minDelay - elapsed);
-          setTimeout(() => setReady(true), wait);
-        }
-      };
-      img.onload = done; img.onerror = done; img.src = u;
+    
+    // Preload with higher priority and proper caching
+    const loadPromises = urls.map(u => {
+      return new Promise<void>((resolve) => {
+        const img = new Image();
+        // Set proper cache headers and loading priority
+        img.crossOrigin = 'anonymous';
+        img.decoding = 'async';
+        img.loading = 'eager';
+        
+        const done = () => {
+          loaded += 1;
+          setProgress(loaded / urls.length);
+          if (loaded === urls.length) {
+            const elapsed = performance.now() - start;
+            const minDelay = 550; // ms for nicer fade
+            const wait = Math.max(0, minDelay - elapsed);
+            setTimeout(() => setReady(true), wait);
+          }
+          resolve();
+        };
+        img.onload = done; 
+        img.onerror = done; 
+        img.src = u;
+      });
+    });
+    
+    // Force browser to cache these images immediately
+    Promise.all(loadPromises).then(() => {
+      // Additional caching optimization
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          urls.forEach(url => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = url;
+            document.head.appendChild(link);
+          });
+        });
+      }
     });
   }, []);
 
@@ -150,9 +149,13 @@ export default function App() {
   const scrollAnimRef = useRef<AnimationPlaybackControls | null>(null);
   const isAnimatingRef = useRef(false);
 
+  // Carousel-specific state
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
   // Observe section masuk viewport untuk highlight nav (re-init setelah ready)
   useEffect(() => {
-    if (!ready) return; // tunggu container render
+    if (!ready || isRowLayout) return; // skip for carousel mode
     const rootEl = containerRef.current;
     if (!rootEl) return;
     const els = sectionRefs.current.filter(Boolean) as HTMLDivElement[];
@@ -169,9 +172,24 @@ export default function App() {
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, [ready]);
+  }, [ready, isRowLayout]);
 
   const scrollToIndex = (idx: number, opts?: { overshoot?: boolean }) => {
+    if (isRowLayout) {
+      // Carousel navigation
+      const carousel = carouselRef.current;
+      if (!carousel) return;
+      
+      if (idx < 0) idx = 0;
+      if (idx >= SECTIONS.length) idx = SECTIONS.length - 1;
+      
+      setCurrentSlide(idx);
+      setActive(idx);
+      
+      return;
+    }
+    
+    // Original column layout logic
     const container = containerRef.current;
     const targetEl = sectionRefs.current[idx];
     if (!container || !targetEl) return;
@@ -234,9 +252,86 @@ export default function App() {
     }
   };
 
-  // Wheel listener ringan: hanya snap bila gesture cukup besar; bounce via scrollToIndex
+  // Event listeners for both layouts
   useEffect(() => {
-    if (!ready) return; // attach setelah siap
+    if (!ready) return;
+    
+    if (isRowLayout) {
+      // Carousel navigation - simplified
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (isAnimatingRef.current) return;
+        
+        let nextSlide = currentSlide;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          nextSlide = Math.max(0, currentSlide - 1);
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          nextSlide = Math.min(SECTIONS.length - 1, currentSlide + 1);
+        }
+        
+        if (nextSlide !== currentSlide) {
+          scrollToIndex(nextSlide);
+        }
+      };
+      
+      const handleWheel = (e: WheelEvent) => {
+        if (isAnimatingRef.current) return;
+        
+        e.preventDefault();
+        const direction = Math.sign(e.deltaY);
+        const nextSlide = Math.max(0, Math.min(SECTIONS.length - 1, currentSlide + direction));
+        
+        if (nextSlide !== currentSlide) {
+          scrollToIndex(nextSlide);
+        }
+      };
+      
+      // Touch/swipe support - simplified
+      let touchStartX = 0;
+      let touchStartTime = 0;
+      
+      const handleTouchStart = (e: TouchEvent) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+      };
+      
+      const handleTouchEnd = (e: TouchEvent) => {
+        if (isAnimatingRef.current) return;
+        
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndTime = Date.now();
+        const deltaX = touchEndX - touchStartX;
+        const deltaTime = touchEndTime - touchStartTime;
+        
+        // Only trigger if it's a quick swipe with sufficient distance
+        if (deltaTime < 300 && Math.abs(deltaX) > 80) {
+          const direction = deltaX > 0 ? -1 : 1; // Swipe right = previous, swipe left = next
+          const nextSlide = Math.max(0, Math.min(SECTIONS.length - 1, currentSlide + direction));
+          
+          if (nextSlide !== currentSlide) {
+            scrollToIndex(nextSlide);
+          }
+        }
+      };
+      
+      document.addEventListener('keydown', handleKeyDown);
+      const carousel = carouselRef.current;
+      if (carousel) {
+        carousel.addEventListener('wheel', handleWheel, { passive: false });
+        carousel.addEventListener('touchstart', handleTouchStart, { passive: true });
+        carousel.addEventListener('touchend', handleTouchEnd, { passive: true });
+      }
+      
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        if (carousel) {
+          carousel.removeEventListener('wheel', handleWheel);
+          carousel.removeEventListener('touchstart', handleTouchStart);
+          carousel.removeEventListener('touchend', handleTouchEnd);
+        }
+      };
+    }
+    
+    // Original column layout listeners
     const el = containerRef.current;
     if (!el) return;
     const lastRef = { current: 0 };
@@ -259,7 +354,9 @@ export default function App() {
 
   // ===== Mobile natural snap assist (sederhana anti-glitch) =====
   useEffect(() => {
-    if (!ready) return; const el = containerRef.current; if (!el) return;
+    if (!ready || isRowLayout) return; // skip for carousel mode
+    const el = containerRef.current; 
+    if (!el) return;
     const isCoarse = window.matchMedia('(pointer:coarse)').matches; if (!isCoarse) return;
     let idleTimer: number | null = null;
     const IDLE_DELAY = 120; // ms setelah momentum berhenti
@@ -274,7 +371,7 @@ export default function App() {
     const onScroll = () => { if (idleTimer) clearTimeout(idleTimer); idleTimer = window.setTimeout(snapToNearest, IDLE_DELAY); };
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => { el.removeEventListener('scroll', onScroll); if (idleTimer) clearTimeout(idleTimer); };
-  }, [active, ready]);
+  }, [active, ready, isRowLayout]);
 
   if (!ready) {
     return (
@@ -295,25 +392,71 @@ export default function App() {
   }
 
   return (
-    <div
-      ref={containerRef}
-      data-scroll-root="true"
-      className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scrollbar-none relative bg-black"
-    >
-      <Header active={active} onJump={scrollToIndex} sections={SECTIONS} brand="J-ViMs" />
-      <NavDots count={SECTIONS.length} active={active} onJump={scrollToIndex} />
-      {SECTIONS.map((s, i) => (
-        <Section
-          key={s.id}
-          ref={(el: HTMLDivElement | null) => { sectionRefs.current[i] = el; }}
-          data={s}
-          index={i}
-        />
-      ))}
-      <ScrollProgress targetRef={containerRef} />
-      <ArrowNav active={active} onJump={scrollToIndex} total={SECTIONS.length} />
-      <CursorBullet />
-    </div>
+    <>
+      <Head title="Destinasi Pariwisata" />
+      {isRowLayout ? (
+        // Carousel Layout
+        <div className="h-screen w-screen overflow-hidden relative bg-black">
+          <Header 
+            active={currentSlide} 
+            onJump={scrollToIndex} 
+            sections={SECTIONS} 
+            brand="J-ViMs" 
+          />
+          <NavDots 
+            count={SECTIONS.length} 
+            active={currentSlide} 
+            onJump={scrollToIndex} 
+          />
+          <div
+            ref={carouselRef}
+            className="flex h-full w-full carousel-container"
+            style={{ 
+              transform: `translateX(-${currentSlide * 100}%)`,
+              transition: isAnimatingRef.current ? 'none' : 'transform 0.6s cubic-bezier(0.25, 0.85, 0.35, 1)'
+            }}
+          >
+            {SECTIONS.map((s, i) => (
+              <div key={s.id} className="carousel-slide">
+                <CarouselSection
+                  ref={(el: HTMLDivElement | null) => { sectionRefs.current[i] = el; }}
+                  data={s}
+                  index={i}
+                  isActive={i === currentSlide}
+                />
+              </div>
+            ))}
+          </div>
+          <ArrowNav 
+            active={currentSlide} 
+            onJump={scrollToIndex} 
+            total={SECTIONS.length} 
+          />
+          <CursorBullet />
+        </div>
+      ) : (
+        // Column Layout (Original)
+        <div
+          ref={containerRef}
+          data-scroll-root="true"
+          className="h-screen w-screen overflow-y-scroll snap-y snap-mandatory scrollbar-none relative bg-black"
+        >
+          <Header active={active} onJump={scrollToIndex} sections={SECTIONS} brand="J-ViMs" />
+          <NavDots count={SECTIONS.length} active={active} onJump={scrollToIndex} />
+          {SECTIONS.map((s, i) => (
+            <Section
+              key={s.id}
+              ref={(el: HTMLDivElement | null) => { sectionRefs.current[i] = el; }}
+              data={s}
+              index={i}
+            />
+          ))}
+          <ScrollProgress targetRef={containerRef} />
+          <ArrowNav active={active} onJump={scrollToIndex} total={SECTIONS.length} />
+          <CursorBullet />
+        </div>
+      )}
+    </>
   );
 }
 
@@ -325,7 +468,56 @@ const styleId = "__shine_keyframes";
 if (typeof document !== "undefined" && !document.getElementById(styleId)) {
   const el = document.createElement("style");
   el.id = styleId;
-  el.textContent = `@keyframes shine {0% {opacity:0; transform:translateX(0);} 40% {opacity:0.85;} 100% {opacity:0; transform:translateX(220%);} }
-@keyframes overlayZoomIn {0% {opacity:0; transform:scale(1.15);} 60% {opacity:.85;} 100% {opacity:1; transform:scale(1);} }`;
+  el.textContent = `
+@keyframes shine {
+  0% {opacity:0; transform:translateX(0);} 
+  40% {opacity:0.85;} 
+  100% {opacity:0; transform:translateX(220%);} 
+}
+@keyframes overlayZoomIn {
+  0% {opacity:0; transform:scale(1.15);} 
+  60% {opacity:.85;} 
+  100% {opacity:1; transform:scale(1);} 
+}
+
+/* Optimize background image rendering */
+[style*="background-image"] {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  image-rendering: optimizeQuality;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Smooth scroll performance */
+.snap-y {
+  scroll-behavior: auto !important;
+}
+
+/* Prevent layout shifts during image transitions */
+section {
+  contain: layout style paint;
+}
+
+/* Optimize overlay rendering */
+.overlay-container {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Carousel specific optimizations */
+.carousel-container {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Prevent layout shifts in carousel */
+.carousel-slide {
+  min-width: 100vw;
+  max-width: 100vw;
+  contain: layout style paint;
+}
+`;
   document.head.appendChild(el);
 }

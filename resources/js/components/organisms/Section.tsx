@@ -4,7 +4,22 @@ import { FancyButton } from '../atoms/FancyButton';
 import Flip from '../FlipText';
 
 
-export type SectionData = { id: string; title: string; navLabel?: string; subtitle?: string; bg?: string; content?: React.ReactNode; ctaHref?: string; overlays?: string[]; align?: 'left' | 'right' };
+export type SectionData = {
+    id: string;
+    title: string;
+    navLabel?: string;
+    subtitle?: string;
+    bg?: string;
+    content?: React.ReactNode;
+    ctaHref?: string;
+    overlays?: {
+        url: string;
+        position_horizontal: 'left' | 'center' | 'right' | null;
+        position_vertical: 'top' | 'center' | 'bottom' | null;
+        object_fit: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down' | 'crop' | null;
+    }[];
+    align?: 'left' | 'right';
+};
 
 export const Section = forwardRef<HTMLDivElement, { data: SectionData; index: number }>(({ data, index }, ref) => {
     const { bg, title, subtitle, content, ctaHref, overlays, align = 'left' } = data;
@@ -56,7 +71,40 @@ export const Section = forwardRef<HTMLDivElement, { data: SectionData; index: nu
                         ease: "easeOut"
                     }}
                 >
-                    {overlays.map((src, i) => { const depth = (i + 1) / overlays.length; const mul = 6 * depth; const driftMul = depth / 10; return <div key={i} style={{ position: 'absolute', inset: 0, backgroundImage: `url(${src})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'cover', transform: `translate3d(calc(var(--oxp,0)*${mul}%) , calc(var(--oyp,0)*${mul}% + var(--sShift,0) + var(--dy,0)*${driftMul}),0) rotate(calc(var(--oxp,0)*${(depth * 5).toFixed(3)}deg)) scale(${(1 + depth * 0.05).toFixed(3)})`, willChange: 'transform' }} aria-hidden="true" />; })}
+                    {overlays.map((overlay, i) => {
+                        // Placement logic using position_horizontal and position_vertical
+                        let stylePos: React.CSSProperties = {};
+                        if (overlay.position_horizontal && overlay.position_vertical) {
+                          if (overlay.position_horizontal === 'center' && overlay.position_vertical === 'center') {
+                            stylePos = { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' };
+                          } else {
+                            if (overlay.position_vertical === 'top') stylePos.top = 0;
+                            if (overlay.position_vertical === 'center') stylePos.top = '50%';
+                            if (overlay.position_vertical === 'bottom') stylePos.bottom = 0;
+                            if (overlay.position_horizontal === 'left') stylePos.left = 0;
+                            if (overlay.position_horizontal === 'center') stylePos.left = '50%';
+                            if (overlay.position_horizontal === 'right') stylePos.right = 0;
+                            if (overlay.position_horizontal === 'center' && overlay.position_vertical !== 'center') stylePos.transform = 'translateX(-50%)';
+                            if (overlay.position_vertical === 'center' && overlay.position_horizontal !== 'center') stylePos.transform = 'translateY(-50%)';
+                          }
+                        }
+                        return (
+                          <div
+                            key={i}
+                            style={{
+                              position: 'absolute',
+                              backgroundImage: `url(${overlay.url})`,
+                              backgroundRepeat: 'no-repeat',
+                              backgroundPosition: 'center',
+                              backgroundSize: overlay.object_fit || 'cover',
+                              width: '180px', height: '180px',
+                              ...stylePos,
+                              willChange: 'transform',
+                            }}
+                            aria-hidden="true"
+                          />
+                        );
+                    })}
                 </motion.div>
             )}
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ amount: 0.6, once: false }} transition={{ duration: 0.6, ease: 'easeOut' }} className={`pl-4 md:pl-8 pr-4 md:pr-8 max-w-5xl w-full ${align === 'right' ? 'text-right mr-12' : 'text-left'}`}>

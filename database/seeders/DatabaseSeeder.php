@@ -3,9 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Pariwisata;
-use App\Models\PariwisataOverlays;
-use App\Models\Setting;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,26 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Default user
-        $user = User::factory()->create([
-            'name' => 'Bintang',
-            'email' => 'bintang@gmail.com',
-            'password' => bcrypt('12345678'),
+        // User::factory(10)->create();
+
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
         ]);
-
-        // Sample pariwisata records
-        $pariwisata = Pariwisata::factory()->count(2)->create();
-
-        // 5 overlay records with alignment-only schema
-        foreach (range(1,5) as $i) {
-            PariwisataOverlays::factory()->create([
-                'pariwisata_id' => $pariwisata->random()->id,
-            ]);
-        }
-
-        Setting::create([
-            'style' => 'column',
+        
+        $this->call([
+            PariwisataSeeder::class,
         ]);
-
     }
 }

@@ -4,12 +4,29 @@ use App\Http\Controllers\Admin\PariwisataController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TahunAkademikController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\PariwisataApiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('frontend.index');
 })->name('home');
+
+// Frontend Routes (Public)
+Route::get('/view', [FrontendController::class, 'index'])->name('frontend.index');
+Route::get('/view/{slug}', [FrontendController::class, 'show'])->name('frontend.show');
+
+// Admin Routes
+Route::get('/admin', function () {
+    return redirect()->route('login');
+})->name('admin.home');
+
+// API Routes (Public)
+Route::prefix('api')->group(function () {
+    Route::get('/pariwisata', [PariwisataApiController::class, 'index'])->name('api.pariwisata.index');
+    Route::get('/pariwisata/{slug}', [PariwisataApiController::class, 'show'])->name('api.pariwisata.show');
+});
 
 Route::get('/glitchtip/error', function () {
     throw new Exception('My first GlitchTip error!');

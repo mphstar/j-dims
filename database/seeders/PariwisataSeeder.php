@@ -10,16 +10,16 @@ class PariwisataSeeder extends Seeder
 {
     public function run(): void
     {
-        // Data pariwisata Indonesia
+        // Data pariwisata Jember
         $pariwisataData = [
             [
-                'title' => 'Borobudur',
-                'label' => 'Candi Bersejarah',
-                'subtitle' => 'Keajaiban Dunia di Jawa Tengah',
-                'slug' => 'borobudur',
-                'content' => "Candi Borobudur adalah candi Buddha terbesar di dunia dan salah satu monumen Buddha terbesar di dunia. Dibangun pada abad ke-8 dan ke-9 Masehi pada masa pemerintahan Dinasti Syailendra.\n\nCandi ini memiliki enam teras berbentuk bujur sangkar yang diatapi oleh tiga pelataran berbentuk lingkaran, dan dihiasi dengan 2.672 panel relief dan 504 arca Buddha.",
+                'title' => 'Pantai Papuma',
+                'label' => 'Pantai Indah',
+                'subtitle' => 'Keindahan Pantai di Jember',
+                'slug' => 'pantai-papuma',
+                'content' => "Pantai Papuma adalah salah satu pantai terindah di Jember yang terkenal dengan pasir putihnya dan formasi batu karang yang unik. Pantai ini menawarkan pemandangan yang menakjubkan dengan hamparan pasir putih dan air laut yang jernih.\n\nPantai Papuma merupakan destinasi wisata favorit bagi wisatawan lokal maupun mancanegara yang berkunjung ke Jember.",
                 'background_url' => 'https://picsum.photos/1920/1080?random=1',
-                'cta_href' => 'https://borobudurpark.com/',
+                'cta_href' => '#',
                 'cta_label' => 'Kunjungi Sekarang',
                 'align' => 'left',
                 'overlays' => [
@@ -38,14 +38,14 @@ class PariwisataSeeder extends Seeder
                 ]
             ],
             [
-                'title' => 'Raja Ampat',
-                'label' => 'Surga Diving',
-                'subtitle' => 'Keanekaragaman Hayati Laut Terbaik Dunia',
-                'slug' => 'raja-ampat',
-                'content' => "Raja Ampat adalah kepulauan yang terletak di ujung barat laut Semenanjung Kepala Burung (Vogelkoop) Pulau Papua. Secara administrasi, gugusan kepulauan ini berada di bawah Kabupaten Raja Ampat, Provinsi Papua Barat.\n\nKepulauan ini merupakan tempat yang tepat bagi para pecinta diving karena memiliki keanekaragaman hayati laut terlengkap di dunia.",
+                'title' => 'Jember Mini Zoom',
+                'label' => 'Kebun Binatang',
+                'subtitle' => 'Wisata Keluarga di Jember',
+                'slug' => 'jember-mini-zoom',
+                'content' => "Jember Mini Zoom adalah kebun binatang mini yang menyajikan berbagai koleksi satwa dan merupakan destinasi wisata edukatif yang cocok untuk keluarga. Pengunjung dapat melihat berbagai jenis hewan dan belajar tentang keanekaragaman hayati.\n\nTempat ini sangat cocok untuk wisata bersama keluarga dan anak-anak untuk mengenal lebih dekat dengan berbagai satwa.",
                 'background_url' => 'https://picsum.photos/1920/1080?random=2',
-                'cta_href' => 'https://www.indonesia.travel/gb/en/destinations/bali-nusa-tenggara/raja-ampat',
-                'cta_label' => 'Jelajahi Raja Ampat',
+                'cta_href' => '#',
+                'cta_label' => 'Jelajahi Sekarang',
                 'align' => 'right',
                 'overlays' => [
                     [
@@ -63,14 +63,14 @@ class PariwisataSeeder extends Seeder
                 ]
             ],
             [
-                'title' => 'Danau Toba',
-                'label' => 'Danau Vulkanik',
-                'subtitle' => 'Keindahan Alam Sumatera Utara',
-                'slug' => 'danau-toba',
-                'content' => "Danau Toba adalah danau alami berukuran besar di Indonesia yang terletak di kaldera gunung berapi super. Danau ini memiliki panjang 100 kilometer, lebar 30 kilometer, dan kedalaman hingga 508 meter.\n\nDanau ini terletak di tengah pulau Sumatera bagian utara dengan ketinggian permukaan sekitar 900 meter di atas permukaan laut.",
+                'title' => 'Wisata Kebun Teh',
+                'label' => 'Perkebunan Teh',
+                'subtitle' => 'Hamparan Hijau Kebun Teh',
+                'slug' => 'wisata-kebun-teh',
+                'content' => "Wisata Kebun Teh menawarkan pemandangan hijau perkebunan teh yang membentang luas dengan udara sejuk pegunungan. Pengunjung dapat menikmati keindahan alam, berfoto di tengah kebun teh, dan belajar tentang proses pengolahan teh.\n\nTempat ini sangat cocok untuk melepas penat dan menikmati suasana alam yang asri dan menenangkan.",
                 'background_url' => 'https://picsum.photos/1920/1080?random=3',
-                'cta_href' => 'https://www.indonesia.travel/gb/en/destinations/sumatra/north-sumatra/lake-toba',
-                'cta_label' => 'Nikmati Ketenangan',
+                'cta_href' => '#',
+                'cta_label' => 'Nikmati Kesegaran',
                 'align' => 'left',
                 'overlays' => [
                     [
@@ -82,14 +82,14 @@ class PariwisataSeeder extends Seeder
                 ]
             ],
             [
-                'title' => 'Komodo Island',
-                'label' => 'Pulau Naga',
-                'subtitle' => 'Habitat Asli Komodo Dragon',
-                'slug' => 'komodo-island',
-                'content' => "Pulau Komodo adalah sebuah pulau yang terletak di Kepulauan Nusa Tenggara. Pulau Komodo dikenal sebagai habitat asli hewan komodo. Pulau ini juga merupakan kawasan Taman Nasional Komodo.\n\nSelain komodo, pulau ini juga menyimpan eksotisme flora yang menawan serta savana yang luas dan pantai yang menakjubkan.",
+                'title' => 'Rembangan',
+                'label' => 'Wisata Alam',
+                'subtitle' => 'Keindahan Alam Rembangan',
+                'slug' => 'rembangan',
+                'content' => "Rembangan adalah destinasi wisata alam yang menawarkan keindahan pemandangan dan suasana yang tenang. Tempat ini cocok untuk wisata alam, hiking, dan menikmati keindahan panorama pegunungan.\n\nRembangan menjadi pilihan tepat bagi para pecinta alam yang ingin menikmati kesejukan dan keindahan alam yang masih alami.",
                 'background_url' => 'https://picsum.photos/1920/1080?random=4',
-                'cta_href' => 'https://www.indonesia.travel/gb/en/destinations/bali-nusa-tenggara/labuan-bajo',
-                'cta_label' => 'Bertemu Komodo',
+                'cta_href' => '#',
+                'cta_label' => 'Jelajahi Alam',
                 'align' => 'right',
                 'overlays' => [
                     [
@@ -107,14 +107,14 @@ class PariwisataSeeder extends Seeder
                 ]
             ],
             [
-                'title' => 'Bromo Tengger',
-                'label' => 'Gunung Api',
-                'subtitle' => 'Sunrise Spektakuler di Jawa Timur',
-                'slug' => 'bromo-tengger',
-                'content' => "Gunung Bromo adalah sebuah gunung berapi aktif di Jawa Timur, Indonesia. Gunung ini memiliki ketinggian 2.329 meter di atas permukaan laut dan berada dalam empat wilayah kabupaten.\n\nBromo terkenal sebagai objek wisata utama di Jawa Timur. Sebagai sebuah objek wisata, Bromo menjadi menarik karena statusnya sebagai gunung berapi yang masih aktif.",
+                'title' => 'Pemandian Patemon',
+                'label' => 'Pemandian Air Panas',
+                'subtitle' => 'Relaksasi di Air Hangat Alami',
+                'slug' => 'pemandian-patemon',
+                'content' => "Pemandian Patemon adalah objek wisata pemandian air panas alami yang terletak di kawasan pegunungan. Air panas yang mengandung belerang dipercaya memiliki khasiat untuk kesehatan dan relaksasi.\n\nTempat ini sangat cocok untuk berendam sambil menikmati suasana alam pegunungan yang sejuk dan menenangkan.",
                 'background_url' => 'https://picsum.photos/1920/1080?random=5',
-                'cta_href' => 'https://www.indonesia.travel/gb/en/destinations/java/east-java/bromo-tengger-semeru-national-park',
-                'cta_label' => 'Saksikan Sunrise',
+                'cta_href' => '#',
+                'cta_label' => 'Nikmati Relaksasi',
                 'align' => 'left',
                 'overlays' => [
                     [

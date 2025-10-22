@@ -9,13 +9,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('frontend.index');
-})->name('home');
+// Route::get('/', function () {
+//     return redirect()->route('frontend.index');
+// })->name('home');
 
 // Frontend Routes (Public)
-Route::get('/view', [FrontendController::class, 'index'])->name('frontend.index');
-Route::get('/view/{slug}', [FrontendController::class, 'show'])->name('frontend.show');
+Route::get('/', [FrontendController::class, 'index'])->name('home');
+// Route::get('/view/{slug}', [FrontendController::class, 'show'])->name('frontend.show');
 
 // Admin Routes
 Route::get('/admin', function () {

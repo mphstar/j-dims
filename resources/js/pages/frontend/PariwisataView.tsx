@@ -396,7 +396,7 @@ export default function PariwisataView({ pariwisata, setting }: Props) {
       <Head title="Destinasi Pariwisata" />
       {isRowLayout ? (
         // Carousel Layout
-        <div className="h-screen w-screen overflow-hidden relative bg-black">
+        <div className="h-screen w-screen overflow-hidden relative">
           <Header 
             active={currentSlide} 
             onJump={scrollToIndex} 

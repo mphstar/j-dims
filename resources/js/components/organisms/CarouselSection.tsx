@@ -135,7 +135,7 @@ export const CarouselSection = forwardRef<HTMLDivElement, { data: SectionData; i
                 {title.trim().split(/\s+/).map(w => <Flip key={w}>{w}</Flip>)}
                 {subtitle && <p className="mt-4 text-white/90 md:text-xl font-light tracking-wide">{subtitle}</p>}
                 {content && <div className="mt-8">{content}</div>}
-                {ctaHref && <div className="mt-10"><FancyButton href={ctaHref}>Lihat</FancyButton></div>}
+                {ctaHref && <div className="mt-10"><FancyButton href={ctaHref}>{data.ctaLabel ?? 'Lihat'}</FancyButton></div>}
             </motion.div>
             
             <div className="absolute bottom-6 left-6 text-white/60 font-mono">{String(index + 1).padStart(2, '0')}</div>

@@ -64,6 +64,7 @@ function convertToSectionData(pariwisataData: PariwisataType[]): SectionData[] {
       </div>
     ),
     ctaHref: item.cta_href || "#",
+    ctaLabel: item.cta_label || "Lihat",
   }));
 }
 

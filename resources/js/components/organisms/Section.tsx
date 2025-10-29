@@ -12,6 +12,7 @@ export type SectionData = {
     bg?: string;
     content?: React.ReactNode;
     ctaHref?: string;
+    ctaLabel?: string;
     overlays?: {
         url: string;
         position_horizontal: 'left' | 'center' | 'right' | null;
@@ -23,6 +24,7 @@ export type SectionData = {
 
 export const Section = forwardRef<HTMLDivElement, { data: SectionData; index: number }>(({ data, index }, ref) => {
     const { bg, title, subtitle, content, ctaHref, overlays, align = 'left' } = data;
+
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const overlayRef = sectionRef;
     const pos = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
@@ -111,7 +113,7 @@ export const Section = forwardRef<HTMLDivElement, { data: SectionData; index: nu
                 {title.trim().split(/\s+/).map(w => <Flip key={w}>{w}</Flip>)}
                 {subtitle && <p className="mt-4 text-white/90 md:text-xl font-light tracking-wide">{subtitle}</p>}
                 {content && <div className="mt-8">{content}</div>}
-                {ctaHref && <div className="mt-10"><FancyButton href={ctaHref}>Lihat</FancyButton></div>}
+                {ctaHref && <div className="mt-10"><FancyButton href={ctaHref}>{data.ctaLabel ?? 'Lihat'}</FancyButton></div>}
             </motion.div>
             <div className="absolute bottom-6 left-6 text-white/60 font-mono">{String(index + 1).padStart(2, '0')}</div>
         </section>
